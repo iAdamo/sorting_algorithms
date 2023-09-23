@@ -29,6 +29,7 @@ void insertion_sort_list(listint_t **list)
 			{
 				node1->next = node2->next;
 				node2->next->prev = node2->prev;
+				node2->next = NULL, node2->prev = NULL;
 			}
 			if (node1->prev == NULL)
 			{
