@@ -1,60 +1,73 @@
 #include "sort.h"
 
 /**
- * swap - swap two integers
- * @arr: array of integers
- * @a: first integer
- * @b: second integer
- * Return: Nothing
-*/
-void swap(int *arr, int a, int b)
+ * partition - partition
+ * @array: array
+ * @lo: lower
+ * @hi: higher
+ * @size: array's size
+ * Return: i
+ */
+int partition(int *array, int lo, int hi, size_t size)
 {
-	int temp;
+	int i = lo - 1, j = lo;
+	int pivot = array[hi], aux = 0;
 
-	temp = arr[a];
-	arr[a] = arr[b];
-	arr[b] = temp;
-}
-
-/**
- * quick_sort - function that sorts an array of integers.
- * @array: array of integers
- * @size: size of array
- *
- * Description: In ascending order, print the array after each time you swap
- * two elements
- * Implement the `Lomuto` partition scheme.
- * The pivot should always be the last element of the partition being sorted.
- *
- * Return: Nothing
-*/
-void quick_sort(int *array, size_t size)
-{
-	size_t i, j, k;
-	int pivot;
-
-	if (array == NULL || size == 0)
-		return;
-
-	pivot = size - 1;
-
-	for (i = 0; i < size - 1; i++)
+	for (; j < hi; j++)
 	{
-		for (j = pivot; j > i; j--)
+		if (array[j] < pivot)
 		{
-			if (array[i] > array[j])
+			i++;
+			if (array[i] != array[j])
 			{
-				swap(array, i, j);
-				for (k = i + 1; k < j; k++)
-				{
-					if (array[k] > array[j])
-					{
-						swap(array, k, j);
-						quick_sort(array, j);
-					}
-				}
+				aux = array[i];
+				array[i] = array[j];
+				array[j] = aux;
+				print_array(array, size);
 			}
 		}
 	}
-	print_array(array, size);
+	if (array[i + 1] != array[hi])
+	{
+		aux = array[i + 1];
+		array[i + 1] = array[hi];
+		array[hi] = aux;
+		print_array(array, size);
+	}
+	return (i + 1);
+}
+
+/**
+ * quick_s - quick sort
+ * @array: given array
+ * @lo: lower
+ * @hi:higher
+ * @size: array's size
+ * Return: void
+ */
+void quick_s(int *array, int lo, int hi, size_t size)
+{
+	int pivot;
+
+	if (lo < hi)
+	{
+		pivot = partition(array, lo, hi, size);
+		quick_s(array, lo, pivot - 1, size);
+		quick_s(array, pivot + 1, hi, size);
+	}
+}
+
+/**
+ * quick_sort - function that sorts an array of integers
+ *              in ascending order using the Quick sort algorithm
+ * @array: array
+ * @size: array's size
+ * Return: void
+ */
+void quick_sort(int *array, size_t size)
+{
+	if (array == NULL || size < 2)
+		return;
+
+	quick_s(array, 0, size - 1, size);
 }
